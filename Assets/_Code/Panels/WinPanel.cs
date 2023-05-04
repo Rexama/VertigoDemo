@@ -1,26 +1,26 @@
-﻿using _Code.Buttons;
+﻿using Buttons;
+using Tools;
 using UnityEngine;
 
-namespace _Code.Panels
+namespace Panels
 {
     public class WinPanel : MonoBehaviour
     {
-        private Transform _panel;
+        [SerializeField] private Transform winPanel;
 
         private void Awake()
         {
-            _panel = transform.GetChild(0);
-            ExitButton.OnExitButtonPressedEvent += OpenPanel;
+            EventBus.Subscribe("OnExitButtonPressed", OpenPanel);
         }
 
         private void OnDestroy()
         {
-            ExitButton.OnExitButtonPressedEvent -= OpenPanel;
+            EventBus.Unsubscribe("OnExitButtonPressed", OpenPanel);
         }
 
         private void OpenPanel()
         {
-            _panel.gameObject.SetActive(true);
+            winPanel.gameObject.SetActive(true);
         }
     }
 }

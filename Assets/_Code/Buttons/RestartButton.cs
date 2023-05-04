@@ -1,37 +1,10 @@
-﻿using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+﻿using UnityEngine.SceneManagement;
 
-namespace _Code.Buttons
+namespace Buttons
 {
-    public class RestartButton : MonoBehaviour
+    public class RestartButton : ButtonObject
     {
-        private Button _restartButton;
-        private void OnValidate()
-        {
-            TryCacheComponents();
-            AddListeners();
-        }
-        
-        private void Awake()
-        {
-            TryCacheComponents();
-            AddListeners();
-        }
-
-        private void TryCacheComponents()
-        {
-            if (_restartButton != null) return;
-            _restartButton = GetComponent<Button>();
-        }
-
-        private void AddListeners()
-        {
-            _restartButton.onClick.RemoveAllListeners();
-            _restartButton.onClick.AddListener(OnRestartButtonPressed);
-        }
-        
-        private void OnRestartButtonPressed()
+        protected override void OnButtonPressed()
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }

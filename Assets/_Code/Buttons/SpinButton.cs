@@ -1,64 +1,35 @@
-﻿using System;
-using _Code.Data;
-using _Code.Wheel;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using Tools;
 
-namespace _Code.Buttons
+namespace Buttons
 {
-    public class SpinButton : MonoBehaviour
+    public class SpinButton : ButtonObject
     {
-        private Button _spinButton;
-        public static event Action OnSpinButtonPressedEvent;
-
-        private void OnValidate()
+        protected override void SubscribeEvents()
         {
-            TryCacheComponents();
-            AddListeners();
-        }
-        
-        private void Awake()
-        {
-            WheelSpinManager.OnWheelSpinCompleteEvent += OnWheelStopped;
-            ReviveButton.OnReviveButtonPressedEvent += OnRevive;
-            
-            TryCacheComponents();
-            AddListeners();
+            EventBus.Subscribe("OnItemSelected", OnWheelStopped);
+            EventBus.Subscribe("OnReviveButtonPressed", ActivateButton);
         }
 
-        private void OnDisable()
+        protected override void UnsubscribeEvents()
         {
-            WheelSpinManager.OnWheelSpinCompleteEvent -= OnWheelStopped;
-            ReviveButton.OnReviveButtonPressedEvent -= OnRevive;
+            EventBus.Unsubscribe("OnItemSelected", OnWheelStopped);
+            EventBus.Unsubscribe("OnReviveButtonPressed", ActivateButton);
         }
 
-        private void TryCacheComponents()
+        protected override void OnButtonPressed()
         {
-            if (_spinButton != null) return;
-            _spinButton = GetComponent<Button>();
+            EventBus.Trigger("OnSpinButtonPressed");
+            Button.interactable = false;
         }
 
-        private void AddListeners()
+        private void OnWheelStopped()
         {
-            _spinButton.onClick.RemoveAllListeners();
-            _spinButton.onClick.AddListener(OnSpinButtonPressed);
+            Button.interactable = true;
         }
 
-        private void OnSpinButtonPressed()
+        private void ActivateButton()
         {
-            OnSpinButtonPressedEvent?.Invoke();
-            _spinButton.interactable = false;
-        }
-
-        private void OnWheelStopped(ItemData itemData)
-        {
-            if (itemData.ItemType == ItemType.C4) return;
-            _spinButton.interactable = true;
-        }
-        
-        private void OnRevive()
-        {
-            _spinButton.interactable = true;
+            Button.interactable = true;
         }
     }
 }

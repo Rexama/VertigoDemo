@@ -51,8 +51,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab97b03ea1c4ec944bc97442354eb535, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  "\u0131temType": 3
+  itemData: {fileID: 11400000, guid: 376070eee36bc5a4b87be548496b3786, type: 2}
   count: 100
+  countText: {fileID: 3326488338105752778}
+  spriteLoader: {fileID: 3326488338559497596}
 --- !u!1 &3326488338105752776
 GameObject:
   m_ObjectHideFlags: 0
@@ -255,7 +257,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 695551d11f26b754ea6daa109f9a277f, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -277,5 +279,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f120458bce0c4a8dbe20b7085e27c054, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spriteAtlas: {fileID: 4343727234628468602, guid: 32c48f84f46e26d4c92220f0cd85e797, type: 2}
-  spriteName: ui_icon_render_cons_grenade_m67
+  image: {fileID: 3326488338559497597}

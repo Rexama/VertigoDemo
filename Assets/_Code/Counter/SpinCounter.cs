@@ -1,41 +1,42 @@
 using System.Collections.Generic;
-using _Code.Counter;
-using _Code.Data;
-using _Code.Wheel;
+using Tools;
 using UnityEngine;
 using UnityEngine.UI;
+using Wheel;
 
-namespace _Code
+namespace Counter
 {
     public class SpinCounter : MonoBehaviour
     {
+        [SerializeField] private WheelSettings wheelSettings;
+
         private HorizontalLayoutGroup _layoutGroup;
         private List<CounterNumber> _counterNumbers;
         private int _lastCount = 7;
 
-        void Awake()
+        private void Awake()
         {
-            WheelSpinManager.OnWheelSpinCompleteEvent += OnSpinEnd;
+            EventBus.Subscribe("OnItemSelected", OnSpinEnd);
+            EventBus.Subscribe("OnBombSelected", OnSpinEnd);
 
-            TryCacheComponents();
+            CacheComponents();
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
-            WheelSpinManager.OnWheelSpinCompleteEvent -= OnSpinEnd;
+            EventBus.Unsubscribe("OnItemSelected", OnSpinEnd);
+            EventBus.Unsubscribe("OnBombSelected", OnSpinEnd);
         }
 
-        private void TryCacheComponents()
+        private void CacheComponents()
         {
-            if (_layoutGroup != null) return;
-
             _layoutGroup = GetComponentInChildren<HorizontalLayoutGroup>();
             _counterNumbers = new List<CounterNumber>(_layoutGroup.GetComponentsInChildren<CounterNumber>());
         }
 
-        private void OnSpinEnd(ItemData itemData)
+        private void OnSpinEnd()
         {
-            for (int i = _counterNumbers.Count - 1; i > 0; i--)
+            for (var i = _counterNumbers.Count - 1; i > 0; i--)
             {
                 var newPos = _counterNumbers[i - 1].transform.position;
                 _counterNumbers[i].ChangePosition(newPos);
@@ -47,8 +48,10 @@ namespace _Code
         private void SendFirstCountToBack()
         {
             var newPos = _counterNumbers[^1].transform.position;
+            var newCount = _lastCount += 1;
+            var newColor = wheelSettings.GetWheelTypeWithSpinCount(newCount).counterNumberColor;
             _counterNumbers[0].SendToBack(newPos);
-            _counterNumbers[0].UpdateNumberAndColor(_lastCount += 1);
+            _counterNumbers[0].UpdateNumberAndColor(newColor, newCount);
 
             var temp = _counterNumbers[0];
             _counterNumbers.RemoveAt(0);

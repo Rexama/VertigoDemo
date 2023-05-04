@@ -9,15 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7fb97f0797f41d8864cb6b71fb25c8e, type: 3}
-  m_Name: RewardCounts
+  m_Script: {fileID: 11500000, guid: 214747c28b3a4cbdacf143cedbca06d2, type: 3}
+  m_Name: C4
   m_EditorClassIdentifier: 
-  bronze:
-    min: 1
-    max: 100
-  silver:
-    min: 50
-    max: 500
-  golden:
-    min: 100
-    max: 1000
+  sprite: {fileID: 21300000, guid: f41d8822678ebe64f9dd6f165d047e09, type: 3}

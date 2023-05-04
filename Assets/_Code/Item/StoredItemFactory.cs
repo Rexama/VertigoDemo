@@ -1,11 +1,10 @@
 using System.Collections.Generic;
-using _Code.Buttons;
-using _Code.Data;
-using _Code.Wheel;
+using Tools;
 using UnityEngine;
 using UnityEngine.UI;
+using Wheel;
 
-namespace _Code.Item
+namespace Item
 {
     public class StoredItemFactory : MonoBehaviour
     {
@@ -13,35 +12,31 @@ namespace _Code.Item
         [SerializeField] private GameObject horizontalItemPrefab;
         [SerializeField] private HorizontalLayoutGroup winScreenHorizontalGroup;
 
-        private readonly Dictionary<ItemType, Item> _itemDictionary = new Dictionary<ItemType, Item>();
+        private readonly Dictionary<ItemData, ItemObject> _itemDictionary = new Dictionary<ItemData, ItemObject>();
 
 
         private void Awake()
         {
-            WheelSpinManager.OnWheelSpinCompleteEvent += AddStoredItems;
-            ExitButton.OnExitButtonPressedEvent += CopyWinedItems;
+            EventBus.Subscribe("OnExitButtonPressed", CopyWinedItems);
         }
 
         private void OnDestroy()
         {
-            WheelSpinManager.OnWheelSpinCompleteEvent -= AddStoredItems;
-            ExitButton.OnExitButtonPressedEvent -= CopyWinedItems;
+            EventBus.Unsubscribe("OnExitButtonPressed", CopyWinedItems);
         }
 
-        private void AddStoredItems(ItemData itemData)
+        public void AddStoredItems(ItemObjectData itemObjectData)
         {
-            if (itemData.ItemType != ItemType.C4)
+            if (_itemDictionary.ContainsKey(itemObjectData.ItemData))
             {
-                if (_itemDictionary.ContainsKey(itemData.ItemType))
-                {
-                    _itemDictionary[itemData.ItemType].IncreaseItemCount(itemData.Count);
-                }
-                else
-                {
-                    var item = Instantiate(verticalItemPrefab, transform);
-                    item.GetComponent<Item>().PrepareItem(itemData);
-                    _itemDictionary.Add(itemData.ItemType, item.GetComponent<Item>());
-                }
+                _itemDictionary[itemObjectData.ItemData].IncreaseItemCount(itemObjectData.Count);
+            }
+            else
+            {
+                var itemGameObject = Instantiate(verticalItemPrefab, transform);
+                var itemObject = itemGameObject.GetComponent<ItemObject>();
+                itemObject.PrepareItem(itemObjectData);
+                _itemDictionary.Add(itemObjectData.ItemData, itemObject);
             }
         }
 
@@ -50,7 +45,7 @@ namespace _Code.Item
             foreach (var item in _itemDictionary)
             {
                 var newItem = Instantiate(horizontalItemPrefab, winScreenHorizontalGroup.transform);
-                newItem.GetComponent<Item>().PrepareItem(item.Value.GetItemData());
+                newItem.GetComponent<ItemObject>().PrepareItem(item.Value.GetItemData());
             }
         }
     }

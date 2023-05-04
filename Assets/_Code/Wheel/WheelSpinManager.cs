@@ -1,57 +1,49 @@
 ﻿using System;
-using _Code.Data;
+using System.Collections.Generic;
 using DG.Tweening;
+using Item;
+using Tools;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 
-namespace _Code.Wheel
+namespace Wheel
 {
     public class WheelSpinManager : MonoBehaviour
     {
-        [SerializeField] public int itemCount = 8;
-        [SerializeField] private int minCycleCount = 2;
-        [SerializeField] private int maxCycleCount = 3;
-        [SerializeField] private float spinDuration = 4;
-        [SerializeField] private float delayAfterSpin = 0.3f;
+        [SerializeField] private Transform pivot;
+        [SerializeField] private StoredItemFactory storedItemFactory;
 
         private int _prevIndex = 0;
-        private Wheel _wheel;
-        private Transform _pivot;
 
-        public static event Action<ItemData> OnWheelSpinCompleteEvent;
-
-        private void Awake()
+        public void SpinWheel(Wheel wheel)
         {
-            TryCacheComponents();
-        }
+            var wheelSettings = wheel.wheelSettings;
+            var cycleCount = Random.Range(wheelSettings.minCycleCount, wheelSettings.maxCycleCount);
+            var itemNumber = Random.Range(0, wheelSettings.itemCount);
 
-        private void TryCacheComponents()
-        {
-            if (_wheel != null) return;
+            var angle = itemNumber * wheelSettings.wheelDegree / wheelSettings.itemCount;
+            var rotationAngle = cycleCount * wheelSettings.wheelDegree + angle;
 
-            _wheel = GetComponent<Wheel>();
-            _pivot = transform.GetChild(0).transform;
-        }
-
-        public void SpinWheel()
-        {
-            var cycleCount = Random.Range(minCycleCount, maxCycleCount);
-            var itemNumber = Random.Range(0, itemCount);
-
-            var angle = itemNumber * 360 / itemCount;
-            var rotationAngle = cycleCount * 360 + angle;
-
-            _pivot.transform.DORotate(new Vector3(0, 0, rotationAngle), spinDuration, RotateMode.LocalAxisAdd)
+            pivot.transform.DORotate(new Vector3(0, 0, rotationAngle), wheelSettings.spinDuration,
+                    RotateMode.LocalAxisAdd)
                 .OnComplete(() =>
                 {
-                    var index = (itemNumber + _prevIndex) % itemCount;
-                    var itemData = _wheel.items[index].GetItemData();
+                    var index = (itemNumber + _prevIndex) % wheelSettings.itemCount;
+                    var itemObjectData = wheel.wheelItems[index].GetItemData();
                     _prevIndex = index;
 
-                    DOTween.Sequence().AppendInterval(delayAfterSpin).OnComplete(() =>
+                    DOTween.Sequence().AppendInterval(wheelSettings.delayAfterSpin).OnComplete(() =>
                     {
-                        OnWheelSpinCompleteEvent?.Invoke(itemData);
+                        if (itemObjectData.ItemData == wheel.allItemData.bombItem)
+                        {
+                            EventBus.Trigger("OnBombSelected");
+                        }
+                        else
+                        {
+                            EventBus.Trigger("OnItemSelected");
+                            storedItemFactory.AddStoredItems(itemObjectData);
+                        }
                     });
                 });
         }

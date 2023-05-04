@@ -1,57 +1,22 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.U2D;
 using UnityEngine.UI;
 
-namespace _Code.Tools
+namespace Tools
 {
     public class SpriteLoader : MonoBehaviour
     {
-        [SerializeField] private string spriteName;
-
-        private Image _image;
-        private SpriteAtlas _spriteAtlas;
-
-        private void OnValidate()
+        [SerializeField] private Image image;
+        
+        public void TryUpdateSprite(Sprite newSprite)
         {
-            TryLoadSprite();
-        }
+            if (image.sprite == newSprite) return;
 
-        private void Awake()
-        {
-            TryLoadSprite();
-        }
-
-        private void TryLoadSprite()
-        {
-            
-            TryCacheComponents();
-            var sprite = _spriteAtlas.GetSprite(spriteName);
-
-            if (sprite == null) return;
-            
-            LoadSprite(sprite);
-        }
-
-        private void TryCacheComponents()
-        {
-            if (_spriteAtlas != null) return;
-
-            _image = GetComponent<Image>();
-            _spriteAtlas = Resources.Load<SpriteAtlas>("SpriteAtlas");
-        }
-
-        private void LoadSprite(Sprite sprite)
-        {
-            _image.sprite = sprite;
-            var pivot = sprite.pivot;
-            var size = sprite.rect.size;
-            _image.rectTransform.pivot = new Vector2(pivot.x / size.x, pivot.y / size.y);
-        }
-
-        public void UpdateSprite(string newSpriteName)
-        {
-            spriteName = newSpriteName;
-            TryLoadSprite();
+            image.sprite = newSprite;
+            var pivot = newSprite.pivot;
+            var size = newSprite.rect.size;
+            image.rectTransform.pivot = new Vector2(pivot.x / size.x, pivot.y / size.y);
         }
     }
 }

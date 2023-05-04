@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace _Code
+namespace Tools
 {
     public class ConsoleWriter : MonoBehaviour
     {
@@ -8,7 +8,7 @@ namespace _Code
         static string myLog = "";
         private string output;
         private string stack;
-
+        private const int CharLimit = 5000;
         void OnEnable()
         {
             Application.logMessageReceived += Log;
@@ -25,9 +25,9 @@ namespace _Code
             stack = stackTrace;
             //myLog = output + "\n" + myLog;
             myLog = stackTrace + output + "\n" + myLog;
-            if (myLog.Length > 5000)
+            if (myLog.Length > CharLimit)
             {
-                myLog = myLog.Substring(0, 4000);
+                myLog = myLog.Substring(0, CharLimit);
             }
         }
 

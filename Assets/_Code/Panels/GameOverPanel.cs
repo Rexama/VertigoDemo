@@ -1,39 +1,32 @@
-using _Code.Buttons;
-using _Code.Data;
-using _Code.Wheel;
+using Tools;
 using UnityEngine;
 
-namespace _Code.Panels
+namespace Panels
 {
     public class GameOverPanel : MonoBehaviour
     {
-        private Transform _panel;
+        [SerializeField] private Transform gameOverPanel;
 
         private void Awake()
         {
-            WheelSpinManager.OnWheelSpinCompleteEvent += OnWheelSpinComplete;
-            ReviveButton.OnReviveButtonPressedEvent += OnReviveButtonPressed;
-
-            _panel = transform.GetChild(0);
+            EventBus.Subscribe("OnBombSelected",ActivateGameOverPanel);
+            EventBus.Subscribe("OnReviveButtonPressed", DeactivateGameOverPanel);
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
-            WheelSpinManager.OnWheelSpinCompleteEvent -= OnWheelSpinComplete;
-            ReviveButton.OnReviveButtonPressedEvent -= OnReviveButtonPressed;
+            EventBus.Unsubscribe("OnBombSelected",ActivateGameOverPanel);
+            EventBus.Unsubscribe("OnReviveButtonPressed", DeactivateGameOverPanel);
         }
 
-        private void OnWheelSpinComplete(ItemData itemData)
+        private void ActivateGameOverPanel()
         {
-            if (itemData.ItemType == ItemType.C4)
-            {
-                _panel.gameObject.SetActive(true);
-            }
+            gameOverPanel.gameObject.SetActive(true);
         }
 
-        private void OnReviveButtonPressed()
+        private void DeactivateGameOverPanel()
         {
-            _panel.gameObject.SetActive(false);
+            gameOverPanel.gameObject.SetActive(false);
         }
     }
 }

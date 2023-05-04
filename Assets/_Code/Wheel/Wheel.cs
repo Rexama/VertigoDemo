@@ -1,110 +1,82 @@
-﻿using System;
-using System.Collections.Generic;
-using _Code.Buttons;
-using _Code.Data;
-using _Code.Tools;
+﻿using System.Collections.Generic;
+using Item;
+using Tools;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
-namespace _Code.Wheel
+namespace Wheel
 {
     public class Wheel : MonoBehaviour
     {
-        [HideInInspector] public List<Item.Item> items;
+        [SerializeField] public AllItemData allItemData;
+        [SerializeField] public WheelSettings wheelSettings;
+
+        [HideInInspector] public List<ItemObject> wheelItems;
 
         private WheelImageManager _wheelImageManager;
         private WheelSpinManager _wheelSpinManager;
-        private RewardCounts _rewardCounts;
-        private GameObject _safeZoneIcon;
         private int _spinCount = 1;
 
         private void Awake()
         {
-            SubscribeEvents();
-            TryCacheComponents();
+            EventBus.Subscribe("OnSpinButtonPressed", OnStartSpin);
+            EventBus.Subscribe("OnItemSelected", ResetWheel);
+            
+            CacheComponents();
+        }
+        
+        private void OnDestroy()
+        {
+            EventBus.Unsubscribe("OnSpinButtonPressed", OnStartSpin);
+            EventBus.Unsubscribe("OnItemSelected", ResetWheel);
+        }
+        
+        private void CacheComponents()
+        {
+            _wheelImageManager = GetComponent<WheelImageManager>();
+            _wheelSpinManager = GetComponent<WheelSpinManager>();
+            wheelItems = new List<ItemObject>(GetComponentsInChildren<ItemObject>());
         }
 
         private void Start()
         {
-            RandomizeSlots(WheelType.Bronze);
+            RandomizeSlots(wheelSettings.bronzeWheel);
         }
-
-        private void SubscribeEvents()
-        {
-            SpinButton.OnSpinButtonPressedEvent += OnStartSpin;
-            WheelSpinManager.OnWheelSpinCompleteEvent += OnSpinComplete;
-        }
-
-        private void OnDisable()
-        {
-            SpinButton.OnSpinButtonPressedEvent -= OnStartSpin;
-            WheelSpinManager.OnWheelSpinCompleteEvent -= OnSpinComplete;
-        }
-
-        private void TryCacheComponents()
-        {
-            if (_wheelImageManager != null) return;
-
-            _rewardCounts = Resources.Load<RewardCounts>("RewardCounts");
-            _wheelImageManager = GetComponent<WheelImageManager>();
-            _wheelSpinManager = GetComponent<WheelSpinManager>();
-            items = new List<Item.Item>(GetComponentsInChildren<Item.Item>());
-            _safeZoneIcon = transform.GetChild(3).gameObject;
-        }
-
+        
         private void OnStartSpin()
         {
-            _wheelSpinManager.SpinWheel();
+            _wheelSpinManager.SpinWheel(this);
             _spinCount++;
-        }
-
-        private void OnSpinComplete(ItemData selectedItemData)
-        {
-            ResetWheel();
         }
 
         private void ResetWheel()
         {
-            if (_spinCount % 30 == 0)
+            var newWheelType = wheelSettings.GetWheelTypeWithSpinCount(_spinCount);
+            _wheelImageManager.TryUpdateWheelType(newWheelType);
+            RandomizeSlots(newWheelType);
+            
+            if (!newWheelType.isSafeZone)
             {
-                _wheelImageManager.TryUpdateWheelType(WheelType.Golden);
-                RandomizeSlots(WheelType.Golden);
-            }
-            else if (_spinCount % 5 == 0)
-            {
-                _wheelImageManager.TryUpdateWheelType(WheelType.Silver);
-                RandomizeSlots(WheelType.Silver);
-            }
-            else
-            {
-                _wheelImageManager.TryUpdateWheelType(WheelType.Bronze);
-                RandomizeSlots(WheelType.Bronze);
                 PlaceBomb();
             }
-
-            _safeZoneIcon.SetActive(_spinCount % 5 == 0);
         }
 
         private void RandomizeSlots(WheelType currentWheelType)
         {
-            foreach (var item in items)
+            foreach (var item in wheelItems)
             {
-                ItemType randomItemType = ExtensionMethods.GetRandomEnum<ItemType>();
-                while (randomItemType == ItemType.C4)
-                    randomItemType = ExtensionMethods.GetRandomEnum<ItemType>();
-
-                var count = _rewardCounts.GetRandomRewardCount(currentWheelType);
-                var itemData = new ItemData(randomItemType, count);
+                var randomItemData = allItemData.winnableItems.GetRandomElement();
+                var count = currentWheelType.GetRandomRewardCount();
+                var itemData = new ItemObjectData(randomItemData, count);
                 item.PrepareItem(itemData);
             }
         }
 
         private void PlaceBomb()
         {
-            var randomIndex = Random.Range(0, items.Count);
-            ItemData bombItemData = new ItemData(ItemType.C4, 0);
-            items[randomIndex].PrepareItem(bombItemData);
+            var randomIndex = Random.Range(0, wheelItems.Count);
+            var bombItemObjectData = new ItemObjectData(allItemData.bombItem, 0);
+            wheelItems[randomIndex].PrepareItem(bombItemObjectData);
         }
     }
 }

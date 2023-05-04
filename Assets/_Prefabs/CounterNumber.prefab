@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfa797d57e77a0e4faceacd63ee939b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countColors: {fileID: 11400000, guid: c0771003d3addc849a820564c9f1bb59, type: 2}
+  countText: {fileID: 2481498283630486890}
 --- !u!222 &2481498283630486889
 CanvasRenderer:
   m_ObjectHideFlags: 0

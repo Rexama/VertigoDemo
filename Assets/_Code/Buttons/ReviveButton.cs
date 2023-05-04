@@ -1,41 +1,12 @@
-﻿using System;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using Tools;
 
-namespace _Code.Buttons
+namespace Buttons
 {
-    public class ReviveButton : MonoBehaviour
+    public class ReviveButton : ButtonObject
     {
-        
-        private Button _reviveButton;
-        public static event Action OnReviveButtonPressedEvent;
-
-        private void OnValidate()
+        protected override void OnButtonPressed()
         {
-            TryCacheComponents();
-            AddListeners();
-        }
-        private void Awake()
-        {
-            TryCacheComponents();
-            AddListeners();
-        }
-
-        private void TryCacheComponents()
-        {
-            if (_reviveButton != null) return;
-            _reviveButton = GetComponent<Button>();
-        }
-
-        private void AddListeners()
-        {
-            _reviveButton.onClick.RemoveAllListeners();
-            _reviveButton.onClick.AddListener(OnReviveButtonPressed);
-        }
-        
-        private void OnReviveButtonPressed()
-        {
-            OnReviveButtonPressedEvent?.Invoke();
+            EventBus.Trigger("OnReviveButtonPressed");
         }
     }
 }

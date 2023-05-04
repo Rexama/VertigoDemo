@@ -1,54 +1,34 @@
-using _Code.Data;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
-namespace _Code.Counter
+namespace Counter
 {
     public class CounterNumber : MonoBehaviour
     {
-        private CountColors _countColors;
-        private TextMeshProUGUI _text;
+        [SerializeField] private TextMeshProUGUI countText;
 
-        private void Awake()
+        private const float ChangePositionDuration = 0.5f;
+
+        public void UpdateNumberAndColor(Color color, int number)
         {
-            TryCacheComponents();
+            UpdateNumber(number);
+            UpdateColor(color);
         }
 
-        private void TryCacheComponents()
+        private void UpdateColor(Color color)
         {
-            if (_text != null) return;
-
-            _text = GetComponent<TextMeshProUGUI>();
-            _countColors = Resources.Load<CountColors>("CountColors");
+            countText.color = color;
         }
 
-        public void UpdateNumberAndColor(int number)
+        private void UpdateNumber(int number)
         {
-            _text.text = number.ToString();
-
-            UpdateColor(number);
-        }
-
-        private void UpdateColor(int number)
-        {
-            if (number % 30 == 0)
-            {
-                _text.color = _countColors.goldenCounterColor;
-            }
-            else if (number % 5 == 0)
-            {
-                _text.color = _countColors.silverCounterColor;
-            }
-            else
-            {
-                _text.color = _countColors.bronzeCounterColor;
-            }
+            countText.text = number.ToString();
         }
 
         public void ChangePosition(Vector3 position)
         {
-            transform.DOMove(position, 0.5f).SetEase(Ease.OutBounce);
+            transform.DOMove(position, ChangePositionDuration).SetEase(Ease.OutBounce);
         }
 
         public void SendToBack(Vector3 position)

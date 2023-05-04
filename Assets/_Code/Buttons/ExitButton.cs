@@ -1,70 +1,37 @@
-﻿using System;
-using _Code.Data;
-using _Code.Wheel;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using Tools;
 
-namespace _Code.Buttons
+namespace Buttons
 {
-    public class ExitButton : MonoBehaviour
+    public class ExitButton : ButtonObject
     {
-        
-        public static event Action OnExitButtonPressedEvent;
-        
-        private Button _exitButton;
         private int _spinCount = 1;
 
-        private void OnValidate()
+        protected override void OnButtonPressed()
         {
-            TryCacheComponents();
-            AddListeners();
+            EventBus.Trigger("OnExitButtonPressed");
         }
 
-        private void Awake()
+        protected override void SubscribeEvents()
         {
-            WheelSpinManager.OnWheelSpinCompleteEvent += OnWheelStopped;
-            ReviveButton.OnReviveButtonPressedEvent += OnRestartButton;
-            
-            TryCacheComponents();
-            AddListeners();
+            EventBus.Subscribe("OnItemSelected", OnWheelStopped);
+            EventBus.Subscribe("OnReviveButtonPressed", OnReviveButton);
         }
 
-        private void OnDisable()
+        protected override void UnsubscribeEvents()
         {
-            WheelSpinManager.OnWheelSpinCompleteEvent -= OnWheelStopped;
-            ReviveButton.OnReviveButtonPressedEvent -= OnRestartButton;
+            EventBus.Unsubscribe("OnItemSelected", OnWheelStopped);
+            EventBus.Unsubscribe("OnReviveButtonPressed", OnReviveButton);
         }
 
-        private void TryCacheComponents()
-        {
-            if (_exitButton != null) return;
-            _exitButton = GetComponent<Button>();
-        }
-
-        private void AddListeners()
-        {
-            _exitButton.onClick.RemoveAllListeners();
-            _exitButton.onClick.AddListener(OnExitButtonPressed);
-        }
-        
-        private void OnWheelStopped(ItemData itemData)
+        private void OnWheelStopped()
         {
             _spinCount++;
-            
-            if(itemData.ItemType != ItemType.C4)
-              _exitButton.interactable = _spinCount % 5 == 0;
-            
-        }
-        
-        private void OnExitButtonPressed()
-        {
-            OnExitButtonPressedEvent?.Invoke();
-        }
-        
-        private void OnRestartButton()
-        {
-            _exitButton.interactable = _spinCount % 5 == 0;
+            Button.interactable = _spinCount % 5 == 0;
         }
 
+        private void OnReviveButton()
+        {
+            Button.interactable = _spinCount % 5 == 0;
+        }
     }
 }
