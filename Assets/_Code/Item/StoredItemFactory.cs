@@ -1,8 +1,10 @@
 using System.Collections.Generic;
-using Tools;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using Wheel;
+using EventBus = Tools.EventBus;
 
 namespace Item
 {
@@ -42,10 +44,11 @@ namespace Item
 
         private void CopyWinedItems()
         {
-            foreach (var item in _itemDictionary)
+            for (int i = 0; i < _itemDictionary.Count; i++)
             {
                 var newItem = Instantiate(horizontalItemPrefab, winScreenHorizontalGroup.transform);
-                newItem.GetComponent<ItemObject>().PrepareItem(item.Value.GetItemData());
+                var itemData = _itemDictionary.ElementAt(i).Value.GetItemObjectData();
+                newItem.GetComponent<ItemObject>().PrepareItem(itemData);
             }
         }
     }

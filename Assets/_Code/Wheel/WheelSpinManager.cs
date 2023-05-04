@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using DG.Tweening;
+﻿using DG.Tweening;
 using Item;
 using Tools;
 using UnityEngine;
@@ -30,7 +28,7 @@ namespace Wheel
                 .OnComplete(() =>
                 {
                     var index = (itemNumber + _prevIndex) % wheelSettings.itemCount;
-                    var itemObjectData = wheel.wheelItems[index].GetItemData();
+                    var itemObjectData = wheel.wheelItems[index].GetItemObjectData();
                     _prevIndex = index;
 
                     DOTween.Sequence().AppendInterval(wheelSettings.delayAfterSpin).OnComplete(() =>

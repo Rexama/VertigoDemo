@@ -1678,6 +1678,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9e07cf2ec124f82a8fc6fdedde9e9bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  wheelSettings: {fileID: 11400000, guid: ea1944f92bfdd9741b0372c08f0beb95, type: 2}
 --- !u!1 &450466615
 GameObject:
   m_ObjectHideFlags: 0
@@ -3290,7 +3291,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8850ce69ad53cc742b9bd2383a54f352, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 695551d11f26b754ea6daa109f9a277f, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -6382,7 +6383,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab97b03ea1c4ec944bc97442354eb535, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: d5c85653e9d7d204aa9c9a8865ebd329, type: 2}
+  itemData: {fileID: 11400000, guid: 376070eee36bc5a4b87be548496b3786, type: 2}
   count: 10
   countText: {fileID: 1233025781}
   spriteLoader: {fileID: 783633366}

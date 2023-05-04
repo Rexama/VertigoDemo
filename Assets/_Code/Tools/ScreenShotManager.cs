@@ -5,13 +5,13 @@ namespace Tools
     public class ScreenShotManager : MonoBehaviour
     {
 
-        private int screenShotIndex = 1;
+        private int _screenShotIndex = 1;
         public void Update()
         {
             if (Input.GetKeyDown(KeyCode.U))
             {
-                ScreenCapture.CaptureScreenshot("Screenshot"+screenShotIndex+".png");
-                screenShotIndex++;
+                ScreenCapture.CaptureScreenshot("Screenshot"+_screenShotIndex+".png");
+                _screenShotIndex++;
             }
         }
     

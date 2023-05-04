@@ -1,13 +1,14 @@
 using TMPro;
 using Tools;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Item
 {
     public class ItemObject : MonoBehaviour
     {
         [SerializeField] private ItemData itemData;
-        [SerializeField] private int count;
+        [SerializeField] private int itemCount;
 
         [SerializeField] private TextMeshProUGUI countText;
         [SerializeField] private SpriteLoader spriteLoader;
@@ -16,37 +17,37 @@ namespace Item
         {
             UpdateValues();
         }
-
-        private void Awake()
-        {
-            UpdateValues();
-        }
         
         private void UpdateValues()
         {
-            if (count != 0) countText.text = "x" + count;
-            else countText.text = "";
-
-            spriteLoader.TryUpdateSprite(itemData.sprite);
+            UpdateCountText();
+            spriteLoader.TryUpdateSprite(itemData.itemSprite);
         }
+
 
         public void IncreaseItemCount(int increaseAmount)
         {
-            count += increaseAmount;
+            itemCount += increaseAmount;
             UpdateValues();
+        }
+
+        private void UpdateCountText()
+        {
+            if (itemCount != 0) countText.text = "x" + itemCount;
+            else countText.text = "";
         }
         
         
         public void PrepareItem(ItemObjectData newItemData)
         {
             itemData = newItemData.ItemData;
-            count = newItemData.Count;
+            itemCount = newItemData.Count;
             UpdateValues();
         }
 
-        public ItemObjectData GetItemData()
+        public ItemObjectData GetItemObjectData()
         {
-            return new ItemObjectData(itemData, count);
+            return new ItemObjectData(itemData, itemCount);
         }
     }
 }

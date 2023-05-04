@@ -10,7 +10,7 @@ namespace Counter
     {
         [SerializeField] private WheelSettings wheelSettings;
 
-        private HorizontalLayoutGroup _layoutGroup;
+        private HorizontalLayoutGroup _counterLayoutGroup;
         private List<CounterNumber> _counterNumbers;
         private int _lastCount = 7;
 
@@ -31,7 +31,7 @@ namespace Counter
         private void CacheComponents()
         {
             _layoutGroup = GetComponentInChildren<HorizontalLayoutGroup>();
-            _counterNumbers = new List<CounterNumber>(_layoutGroup.GetComponentsInChildren<CounterNumber>());
+            _counterNumbers = new List<CounterNumber>(_counterLayoutGroup.GetComponentsInChildren<CounterNumber>());
         }
 
         private void OnSpinEnd()

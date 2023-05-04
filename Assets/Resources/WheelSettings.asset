@@ -20,6 +20,6 @@ MonoBehaviour:
   itemCount: 8
   minCycleCount: 2
   maxCycleCount: 3
-  spinDuration: 0.5
+  spinDuration: 3
   delayAfterSpin: 0.3
   wheelDegree: 360

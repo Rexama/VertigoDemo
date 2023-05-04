@@ -63,8 +63,9 @@ namespace Wheel
 
         private void RandomizeSlots(WheelType currentWheelType)
         {
-            foreach (var item in wheelItems)
+            for (var i = 0; i < wheelItems.Count; i++)
             {
+                var item = wheelItems[i];
                 var randomItemData = allItemData.winnableItems.GetRandomElement();
                 var count = currentWheelType.GetRandomRewardCount();
                 var itemData = new ItemObjectData(randomItemData, count);

@@ -11,8 +11,8 @@ namespace Tools
                 throw new ArgumentException("Array cannot be null or empty");
             }
             
-            Random rnd = new Random();
-            int index = rnd.Next(0, array.Length);
+            var rnd = new Random();
+            var index = rnd.Next(0, array.Length);
             return array[index];
         }
     }

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Item;
 
 namespace Tools
 {
@@ -30,9 +29,10 @@ namespace Tools
         public static void Trigger(string eventName)
         {
             if (!EventDictionary.TryGetValue(eventName, out var callbacks)) return;
-        
-            foreach (var callback in callbacks)
+
+            for (var i = 0; i < callbacks.Count; i++)
             {
+                var callback = callbacks[i];
                 callback.Invoke();
             }
         }
