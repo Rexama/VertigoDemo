@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 214747c28b3a4cbdacf143cedbca06d2, type: 3}
   m_Name: MedkitEaster
   m_EditorClassIdentifier: 
-  sprite: {fileID: 21300000, guid: 216467e59e88eae4387a131117c2f739, type: 3}
+  itemSprite: {fileID: 21300000, guid: 216467e59e88eae4387a131117c2f739, type: 3}

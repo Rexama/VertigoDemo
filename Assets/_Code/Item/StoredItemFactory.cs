@@ -19,12 +19,12 @@ namespace Item
 
         private void Awake()
         {
-            EventBus.Subscribe("OnExitButtonPressed", CopyWinedItems);
+            EventBus.Subscribe("OnExitButtonPressed", CopyStoredItems);
         }
 
         private void OnDestroy()
         {
-            EventBus.Unsubscribe("OnExitButtonPressed", CopyWinedItems);
+            EventBus.Unsubscribe("OnExitButtonPressed", CopyStoredItems);
         }
 
         public void AddStoredItems(ItemObjectData itemObjectData)
@@ -42,9 +42,9 @@ namespace Item
             }
         }
 
-        private void CopyWinedItems()
+        private void CopyStoredItems()
         {
-            for (int i = 0; i < _itemDictionary.Count; i++)
+            for (var i = 0; i < _itemDictionary.Count; i++)
             {
                 var newItem = Instantiate(horizontalItemPrefab, winScreenHorizontalGroup.transform);
                 var itemData = _itemDictionary.ElementAt(i).Value.GetItemObjectData();
