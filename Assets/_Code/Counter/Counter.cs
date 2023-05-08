@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Tools;
 using UnityEngine;
-using UnityEngine.UI;
 using Wheel;
 
 namespace Counter

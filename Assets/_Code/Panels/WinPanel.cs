@@ -1,5 +1,4 @@
-﻿using Buttons;
-using Tools;
+﻿using Tools;
 using UnityEngine;
 
 namespace Panels
@@ -10,15 +9,15 @@ namespace Panels
 
         private void Awake()
         {
-            EventBus.Subscribe("OnExitButtonPressed", OpenPanel);
+            EventBus.Subscribe("OnExitButtonPressed", ActivatePanel);
         }
 
         private void OnDestroy()
         {
-            EventBus.Unsubscribe("OnExitButtonPressed", OpenPanel);
+            EventBus.Unsubscribe("OnExitButtonPressed", ActivatePanel);
         }
 
-        private void OpenPanel()
+        private void ActivatePanel()
         {
             winPanel.gameObject.SetActive(true);
         }

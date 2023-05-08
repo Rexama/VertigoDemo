@@ -10,32 +10,24 @@ namespace Wheel
     {
         [SerializeField] public AllItemData allItemData;
         [SerializeField] public WheelSettings wheelSettings;
-
-        [HideInInspector] public List<ItemObject> wheelItems;
-
-        private WheelImageManager _wheelImageManager;
-        private WheelSpinManager _wheelSpinManager;
+        [SerializeField] public List<ItemObject> wheelItems;
+        
+        [SerializeField] private WheelImageManager wheelImageManager;
+        [SerializeField] private WheelSpinManager wheelSpinManager;
+        
         private int _spinCount = 1;
 
         private void Awake()
         {
-            EventBus.Subscribe("OnSpinButtonPressed", OnStartSpin);
+            EventBus.Subscribe("OnSpinButtonPressed", StartSpin);
             EventBus.Subscribe("OnItemSelected", ResetWheel);
             
-            CacheComponents();
         }
         
         private void OnDestroy()
         {
-            EventBus.Unsubscribe("OnSpinButtonPressed", OnStartSpin);
+            EventBus.Unsubscribe("OnSpinButtonPressed", StartSpin);
             EventBus.Unsubscribe("OnItemSelected", ResetWheel);
-        }
-        
-        private void CacheComponents()
-        {
-            _wheelImageManager = GetComponent<WheelImageManager>();
-            _wheelSpinManager = GetComponent<WheelSpinManager>();
-            wheelItems = new List<ItemObject>(GetComponentsInChildren<ItemObject>());
         }
 
         private void Start()
@@ -43,16 +35,16 @@ namespace Wheel
             RandomizeSlots(wheelSettings.bronzeWheel);
         }
         
-        private void OnStartSpin()
+        private void StartSpin()
         {
-            _wheelSpinManager.SpinWheel(this);
+            wheelSpinManager.SpinWheel(this);
             _spinCount++;
         }
 
         private void ResetWheel()
         {
             var newWheelType = wheelSettings.GetWheelTypeWithSpinCount(_spinCount);
-            _wheelImageManager.TryUpdateWheelType(newWheelType);
+            wheelImageManager.TryUpdateWheelType(newWheelType);
             RandomizeSlots(newWheelType);
             
             if (!newWheelType.isSafeZone)

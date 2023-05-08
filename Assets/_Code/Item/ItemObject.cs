@@ -1,7 +1,6 @@
 using TMPro;
 using Tools;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Item
 {

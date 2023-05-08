@@ -6,13 +6,13 @@ namespace Buttons
     {
         protected override void SubscribeEvents()
         {
-            EventBus.Subscribe("OnItemSelected", OnWheelStopped);
+            EventBus.Subscribe("OnItemSelected", ActivateButton);
             EventBus.Subscribe("OnReviveButtonPressed", ActivateButton);
         }
 
         protected override void UnsubscribeEvents()
         {
-            EventBus.Unsubscribe("OnItemSelected", OnWheelStopped);
+            EventBus.Unsubscribe("OnItemSelected", ActivateButton);
             EventBus.Unsubscribe("OnReviveButtonPressed", ActivateButton);
         }
 
@@ -21,12 +21,7 @@ namespace Buttons
             EventBus.Trigger("OnSpinButtonPressed");
             Button.interactable = false;
         }
-
-        private void OnWheelStopped()
-        {
-            Button.interactable = true;
-        }
-
+        
         private void ActivateButton()
         {
             Button.interactable = true;

@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿using System.Collections;
+using DG.Tweening;
 using Item;
 using Tools;
 using UnityEngine;
@@ -31,19 +32,23 @@ namespace Wheel
                     var itemObjectData = wheel.wheelItems[index].GetItemObjectData();
                     _prevIndex = index;
 
-                    DOTween.Sequence().AppendInterval(wheelSettings.delayAfterSpin).OnComplete(() =>
-                    {
-                        if (itemObjectData.ItemData == wheel.allItemData.bombItem)
-                        {
-                            EventBus.Trigger("OnBombSelected");
-                        }
-                        else
-                        {
-                            EventBus.Trigger("OnItemSelected");
-                            storedItemFactory.AddStoredItems(itemObjectData);
-                        }
-                    });
+                    StartCoroutine(HandleOnSpinEndEvents(itemObjectData, wheelSettings, wheel));
                 });
+        }
+
+        private IEnumerator HandleOnSpinEndEvents(ItemObjectData item,WheelSettings settings, Wheel wheel)
+        {
+            yield return settings.delayAfterSpin;
+            
+            if (item.ItemData == wheel.allItemData.bombItem)
+            {
+                EventBus.Trigger("OnBombSelected");
+            }
+            else
+            {
+                EventBus.Trigger("OnItemSelected");
+                storedItemFactory.AddStoredItems(item);
+            }
         }
     }
 }
