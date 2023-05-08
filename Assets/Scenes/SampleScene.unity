@@ -4919,6 +4919,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f77e8a148a7576d439bcfd9ec2b81fb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _screenShotIndex: 1
 --- !u!4 &1199355344
 Transform:
   m_ObjectHideFlags: 0
@@ -7399,7 +7400,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   allItemData: {fileID: 11400000, guid: 8bed91d7f4c17874899cd60ecf9f6b11, type: 2}
   wheelSettings: {fileID: 11400000, guid: ea1944f92bfdd9741b0372c08f0beb95, type: 2}
-  wheelItems: []
+  wheelItems:
+  - {fileID: 1478246675}
+  - {fileID: 1263328966}
+  - {fileID: 1892482816}
+  - {fileID: 1616743738}
+  - {fileID: 236126547}
+  - {fileID: 97497873}
+  - {fileID: 1381427653}
+  - {fileID: 953879584}
+  wheelImageManager: {fileID: 1725959536}
+  wheelSpinManager: {fileID: 1725959537}
 --- !u!114 &1725959536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8469,7 +8480,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wheelSettings: {fileID: 11400000, guid: ea1944f92bfdd9741b0372c08f0beb95, type: 2}
-  counterLayoutGroup: {fileID: 1862132640}
   counterNumbers:
   - {fileID: 1963590005}
   - {fileID: 2076408476}
