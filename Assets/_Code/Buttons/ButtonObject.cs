@@ -20,6 +20,7 @@ namespace Buttons
 
         protected void OnDestroy()
         {
+            Button.onClick.RemoveAllListeners();
             UnsubscribeEvents();
         }
 

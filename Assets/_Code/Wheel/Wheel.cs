@@ -21,7 +21,6 @@ namespace Wheel
         {
             EventBus.Subscribe("OnSpinButtonPressed", StartSpin);
             EventBus.Subscribe("OnItemSelected", ResetWheel);
-            
         }
         
         private void OnDestroy()
